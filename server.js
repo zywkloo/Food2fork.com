@@ -29,6 +29,61 @@ let API_KEY = 'e6aaaf6e6d45c580a1a1fb68d8f507cb' //<== YOUR API KEY HERE
 
 
 const app = express()
+
+
+function  send_instant_index_page(request, response,ingredient,data){
+  let html_first = ` <!DOCTYPE html>
+  <html lang="en">
+      <head>
+      <title></title>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+      <link rel="stylesheet" href="styles/styles.css">
+      <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+      <script src="js/script.js"></script>
+      </head>
+      <body>
+      <div class="container">
+      <div class="wrapper">
+      Enter Ingredient Name: <input type="text" name="ingredient" id="ingredient" />
+      <button id="submit" onclick="getRecipes()" style="margin-bottom: 50px;">Submit</button>
+      </div>
+      <div id="recipesIngredient"> `
+
+  let html_bottom = ` </div>
+    </div>
+</body>
+</html> `
+  response.writeHead(200, {'Content-Type': 'text/html'});
+  response.write(html_first);
+  //response.write(data);
+  response.write(parse_data_to_html(ingredient,data));
+  response.write(html_bottom);
+  response.end();
+}
+
+function parse_data_to_html(ingredient,data){
+  let html= ''
+  let response = JSON.parse(data)
+  html = html + `
+			<h1> containing ${ingredient} </h1>
+			<ul>
+			<li>count: ${response.count}</li>
+			</ul> `
+  let recipes = response.recipes
+  for (let recipe of recipes) {
+    html = html + `
+                <div class="recipe">
+                <a href="${recipe.f2f_url}" target="_blank">
+                <img src=${recipe.image_url} />
+                <h2>${recipe.title}</h2>
+                </a>
+                </div>`
+    // add sth  here
+  }
+  return html
+}
+
 //Middleware
 app.use(express.static(__dirname + '/public')) //static server
 
@@ -44,7 +99,10 @@ app.get('/recipes', (request, response) => {
     response.sendFile(__dirname + '/views/index.html')
   }
   else {
-    send_index_with_ingredient(request, response, ingredient);
+    url = `https://food2fork.com/api/search?key=${API_KEY}&q=${ingredient}`
+    http_request.get(url, (err, res, data) => {
+      send_instant_index_page(request, response, ingredient, data);
+    })
   }
 })
 

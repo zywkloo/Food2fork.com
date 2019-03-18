@@ -31,7 +31,7 @@ function getRecipes() {
             }
         }
     }
-    xhr.open('GET', `/recipes?ingredient=${ingredientName}`, true)
+    xhr.open('GET', `/api?ingredient=${ingredientName}`, true)
     xhr.send()
 }
 

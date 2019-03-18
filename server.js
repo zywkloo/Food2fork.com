@@ -14,10 +14,12 @@ or
 http://localhost:3000/weather?city=Ottawa
 to just set JSON response. (Note it is helpful to add a JSON formatter extension, like JSON Formatter, to your Chrome browser for viewing just JSON data.)
 */
+
+
 const express = require('express') //express framework
 const http_request = require('request') //helpful npm module for easy http requests
 const PORT = process.env.PORT || 3000 //allow environment variable to possible set PORT
-
+//const MOCK = require('./const.js')
 /*YOU NEED AN APP ID KEY TO RUN THIS CODE
   GET ONE BY SIGNING UP AT openweathermap.org
 */

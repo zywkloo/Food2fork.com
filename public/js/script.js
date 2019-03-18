@@ -16,9 +16,19 @@ function getRecipes() {
 			<h1> containing ${ingredientName} </h1>
 			<ul>
 			<li>count: ${response.count}</li>
-			</ul>
-      <p>${xhr.responseText}</p>
-			`
+			</ul> `
+
+            let recipes = response.recipes
+            for (let recipe of recipes) {
+                ingredientDiv.innerHTML = ingredientDiv.innerHTML + `
+                <div class="recipe">
+                <a href="${recipe.f2f_url}" target="_blank">
+                <img src=${recipe.image_url} />
+                <h2>${recipe.title}</h2>
+                </a>
+                </div>`
+                // add sth  here
+            }
         }
     }
     xhr.open('GET', `/recipes?ingredient=${ingredientName}`, true)
@@ -33,4 +43,6 @@ document.getElementById("ingredient")
     if (event.keyCode === ENTER) {
         document.getElementById("submit").click();
     }
-});
+})
+
+
